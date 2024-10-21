@@ -26,6 +26,40 @@ echo ""
 wget https://static.tp-link.com/upload/software/2024/202407/20240710/Omada_SDN_Controller_v5.14.26.1_linux_x64.deb
 echo | dpkg -i Omada_SDN_Controller_v5.14.26.1_linux_x64.deb
 echo ""
+echo "WOULD YOU LIKE TO INSTALL UFW AND OPEN THE REQUIRED PORTS FOR LAYER 3 MANAGEMENT? "yes" OR "no""
+echo ""
+
+read answer
+
+if [ $answer == yes ]
+then
+	echo ""
+	echo "INSTALLING UFW AND OPENING PORTS REQUIRED FOR LAYER 3 MANAGEMENT"
+	echo ""
+	echo "y" | apt install ufw
+	sudo ufw status verbose
+	sudo ufw allow 22
+	sudo ufw allow 80/tcp
+	sudo ufw allow 443/tcp
+	sudo ufw allow 8088/tcp
+	sudo ufw allow 8043/tcp
+	sudo ufw allow 8843/tcp
+	sudo ufw allow 29810/udp
+	sudo ufw allow 29811/tcp
+	sudo ufw allow 29812/tcp
+	sudo ufw allow 29814/tcp
+	sudo ufw allow 29813/tcp
+	sudo ufw allow 443/tcp
+	sudo ufw allow 8043/tcp
+	sudo ufw allow 27001/udp
+	echo "y" | sudo ufw enable
+	sudo ufw status verbose
+else
+	echo ""
+	echo "PORTS WILL NEED TO BE OPENED IF YOU WANT TO USE THIS CONTROLLER AT LEVEL 3. PORTS HAVE NOT BEEN OPENED USING THE SCRIPT"
+	echo ""
+fi
+
 echo ""
 echo "BEFORE ACCESSING AND USING THE CONTROLLER, THE MACHINE MUST BE RESTARTED. THE MACHINE WILL REBOOT SHORTLY (APPROX 10 SEC)"
 echo ""
