@@ -1,0 +1,36 @@
+#!/bin/bash
+echo "THIS IS JL WIFI'S SCRIPT FOR INSTALLING OMADA CONTROLLER v5.14.26.1 ON UBUNTU 22.04"
+sleep 2
+echo "YOU WILL NEED TO MONITOR THE PROGRESS OF THIS SCRIPT AND HIT ENTER SEVERAL TIMES THROUGHOUT THE INSTALL PROCESS"
+sleep 2
+echo "THIS SCRIPT NEEDS TO BE EXECUTED AS ROOT"
+sleep 2
+echo ""
+echo "UPDATING THE MACHINE REPOSITORY AND INSTALLING THE UPDATES"
+echo ""
+apt update && apt upgrade -y
+echo ""
+echo "INSTALLING JAVA 8"
+echo ""
+apt install openjdk-8-jre-headless -y
+apt install jsvc -y
+echo ""
+echo "INSTALLING MONGODB 7"
+echo ""
+wget https://repo.mongodb.org/apt/ubuntu/dists/jammy/mongodb-org/7.0/multiverse/binary-amd64/mongodb-org-server_7.0.14_amd64.deb 
+echo | dpkg -i mongodb-org-server_7.0.14_amd64.deb
+systemctl enable mongod.service
+echo ""
+echo "INSTALLING OMADA CONTROLLER v5.14.26.1"
+echo ""
+wget https://static.tp-link.com/upload/software/2024/202407/20240710/Omada_SDN_Controller_v5.14.26.1_linux_x64.deb
+echo | dpkg -i Omada_SDN_Controller_v5.14.26.1_linux_x64.deb
+echo ""
+echo ""
+echo "BEFORE ACCESSING AND USING THE CONTROLLER, THE MACHINE MUST BE RESTARTED. THE MACHINE WILL REBOOT SHORTLY (APPROX 10 SEC)"
+echo ""
+echo "ONCE RESTARTED, THE OMADA CONTROLLER CAN BE ACCESSED BY NAVIGATING TO THE CONTROLLER IP:8088"
+echo ""
+echo "GIVE THE CONTROLLER A CHANCE TO STARTUP. IT WILL TAKE A FEW MINUTES"
+sleep 10
+reboot
