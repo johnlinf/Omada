@@ -1,0 +1,79 @@
+#Ubuntu 22.04. Omada Controller version 5.13.30.8. Java 8 is fine and uses MongoDB 4 (https://www.mongodb.com/try/download/community-edition/releases/archive)
+echo ""
+ehco "Script for Ubuntu 22.04. Omada Controller version 5.13.30.8. Java 8 is fine and uses MongoDB 4 (https://www.mongodb.com/try/download/community-edition/releases/archive)"
+echo ""
+echo "UPDATING THE MACHINE REPOSITORY AND INSTALLING THE UPDATES"
+echo ""
+sleep 2
+apt update && upgrade -y
+echo ""
+echo "INSTALLING JAVA 8"
+echo ""
+apt install openjdk-8-jre-headless -y
+echo ""
+echo "INSTALLING JSVC"
+echo ""
+apt install jsvc -y
+echo ""
+echo "INSTALLING libssl1.1_1.1.1 A DEPENDENCY FOR MONGODB"
+echo ""
+wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.23_amd64.deb
+dpkg -i libssl1.1_1.1.1-1ubuntu2.1~18.04.23_amd64.deb 
+echo ""
+echo "INSTALLING MONGODB 4"
+echo ""
+wget https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-amd64/mongodb-org-server_4.4.29_amd64.deb
+dpkg -i mongodb-org-server_4.4.29_amd64.deb
+echo ""
+echo "INSTALLING CONTROLLER 5.13.30.8"
+echo ""
+wget https://static.tp-link.com/upload/software/2024/202402/20240227/Omada_SDN_Controller_v5.13.30.8_linux_x64.deb
+dpkg -i Omada_SDN_Controller_v5.13.30.8_linux_x64.deb
+echo ""
+echo "ENABLING MONGO.SERVICE"
+echo ""
+systemctl enable mongod.service
+sleep 1
+echo ""
+echo "WOULD YOU LIKE TO INSTALL UFW AND OPEN THE REQUIRED PORTS FOR LAYER 3 MANAGEMENT? "yes" OR "no""
+echo ""
+
+read answer2
+
+if [ $answer2 == yes ]
+then
+	echo ""
+	echo "INSTALLING UFW AND OPENING PORTS REQUIRED FOR LAYER 3 MANAGEMENT"
+	echo ""
+	echo "y" | apt install ufw
+	sudo ufw status verbose
+	sudo ufw allow 22
+	sudo ufw allow 80/tcp
+	sudo ufw allow 443/tcp
+	sudo ufw allow 8088/tcp
+	sudo ufw allow 8043/tcp
+	sudo ufw allow 8843/tcp
+	sudo ufw allow 29810/udp
+	sudo ufw allow 29811/tcp
+	sudo ufw allow 29812/tcp
+	sudo ufw allow 29814/tcp
+	sudo ufw allow 29813/tcp
+	sudo ufw allow 443/tcp
+	sudo ufw allow 8043/tcp
+	sudo ufw allow 27001/udp
+	echo "y" | sudo ufw enable
+	sudo ufw status verbose
+else
+	echo ""
+	echo "REQUIRED PORTS OPENED FOR LAYER 3 MANAGEMENT. DOUBLE CHECK STATUS BY RUNNING COMMAND UFW STATUS"
+	echo ""
+fi 
+echo ""
+echo "BEFORE ACCESSING AND USING THE CONTROLLER, THE MACHINE MUST BE RESTARTED. THE MACHINE WILL REBOOT SHORTLY (APPROX 10 SEC)"
+echo ""
+echo "ONCE RESTARTED, THE OMADA CONTROLLER CAN BE ACCESSED BY NAVIGATING TO THE CONTROLLER IP:8088"
+echo ""
+echo "GIVE THE CONTROLLER A CHANCE TO STARTUP. IT WILL TAKE A FEW MINUTES"
+echo ""
+sleep 10
+reboot
