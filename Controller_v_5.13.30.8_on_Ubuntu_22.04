@@ -9,31 +9,39 @@ apt update && upgrade -y
 echo ""
 echo "INSTALLING JAVA 8"
 echo ""
+sleep 5
 apt install openjdk-8-jre-headless -y
 echo ""
 echo "INSTALLING JSVC"
 echo ""
+sleep 5
 apt install jsvc -y
 echo ""
 echo "INSTALLING libssl1.1_1.1.1 A DEPENDENCY FOR MONGODB"
 echo ""
+sleep 5
 wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.23_amd64.deb
 dpkg -i libssl1.1_1.1.1-1ubuntu2.1~18.04.23_amd64.deb 
 echo ""
 echo "INSTALLING MONGODB 4"
 echo ""
+sleep 5
 wget https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-amd64/mongodb-org-server_4.4.29_amd64.deb
 dpkg -i mongodb-org-server_4.4.29_amd64.deb
+sleep 5
+echo ""
+echo "ENABLING & STARTING MONGO.SERVICE"
+echo ""
+sleep 5
+systemctl enable mongod.service
+systemctl start mongod.service
+sleep 1
 echo ""
 echo "INSTALLING CONTROLLER 5.13.30.8"
 echo ""
+sleep 5
 wget https://static.tp-link.com/upload/software/2024/202402/20240227/Omada_SDN_Controller_v5.13.30.8_linux_x64.deb
 dpkg -i Omada_SDN_Controller_v5.13.30.8_linux_x64.deb
-echo ""
-echo "ENABLING MONGO.SERVICE"
-echo ""
-systemctl enable mongod.service
-sleep 1
 echo ""
 echo "WOULD YOU LIKE TO INSTALL UFW AND OPEN THE REQUIRED PORTS FOR LAYER 3 MANAGEMENT? "yes" OR "no""
 echo ""
